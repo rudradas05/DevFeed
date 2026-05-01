@@ -116,15 +116,13 @@ export const logout = (req, res) => {
   res.json({ message: "Logged out" });
 };
 
+export const me = async (req, res) => {
+  try {
+    const userId = req.user && req.user.userId;
 
-export const me = (req, res)=>{
-    try {
-        const userId = req.user.userId;
+    if (!userId) return res.status(401).json({ message: "Unauthorized" });
 
-    const result = await db
-      .select()
-      .from(users)
-      .where(eq(users.id, userId));
+    const result = await db.select().from(users).where(eq(users.id, userId));
 
     const user = result[0];
 
@@ -139,7 +137,8 @@ export const me = (req, res)=>{
         email: user.email,
       },
     });
-    } catch (error) {
-        res.status(500).json({ message: "Server error" });
-    }
-}
+  } catch (error) {
+    console.error("ME ERROR 👉", error);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};

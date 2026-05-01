@@ -12,7 +12,6 @@ import {
 ========================= */
 export const users = pgTable("users", {
   id: uuid("id").defaultRandom().primaryKey(),
-
   username: varchar("username", { length: 50 }).notNull().unique(),
   email: varchar("email", { length: 100 }).notNull().unique(),
   password: text("password").notNull(),
